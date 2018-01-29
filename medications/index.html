@@ -34,6 +34,10 @@
         function displayMedication (medCodings) {
             med_list.innerHTML += "<li> " + getMedicationName(medCodings) + "</li>";
         }
+     
+     function displayMedText (medConcept) {
+            med_list.innerHTML += "<li> " + medConcept.text + "</li>";
+        }
 
         FHIR.oauth2.ready(function(smart) {
             smart.patient.read().then(function(pt) {
@@ -47,10 +51,10 @@
                     med_list.innerHTML = "";
                     results.forEach(function(prescription) {
                         if (prescription.medicationCodeableConcept) {
-                            displayMedication(prescription.medicationCodeableConcept.coding);
+                            displayMedText(prescription.medicationCodeableConcept);
                         } else if (prescription.medicationReference) {
                             var med = refs(prescription, prescription.medicationReference);
-                            displayMedication(med && med.code.coding || []);
+                            displayMedText(med && med.code || []);
                         }
                     });
                 }
